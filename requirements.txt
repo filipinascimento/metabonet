@@ -2,7 +2,7 @@ numpy
 xnetwork
 tqdm
 leidenalg
-igraph-python
+python-igraph
 pandas
 mpmath
 scipy
