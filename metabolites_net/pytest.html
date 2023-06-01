@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>Ice Cream Picker</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+  </head>
+  <body>
+    <py-config>
+        packages = ["matplotlib", "python-igraph"]
+    </py-config>
+    <py-script>
+        import pandas as pd
+        #import igraph as ig
+        #import xnetwork as xn
+        from pyodide.http import open_url
+        url = (
+            "https://raw.githubusercontent.com/Cheukting/pyscript-ice-cream/main/bj-products.csv"
+        )
+        ice_data = pd.read_csv(open_url(url))
+    </py-script>
+  
+    <py-repl>
+        ice_data
+    </py-repl>
+  </body>
+</html>

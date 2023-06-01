@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<style>
+		html,
+		body {
+			font-family: "Helvetica Neue Light", Helvetica, sans-serif;
+			font-size: 12px;
+			/* border: none;
+		padding: 0px;
+		margin: 0px;
+		width:100%;
+		height:100%;
+		margin:0;
+		padding:0;
+		overflow:hidden;
+		/* overflow: scroll;
+		-webkit-overflow-scrolling: touch; */
+			/* position:absolute;
+		top:0;
+		left:0;
+		right:0;
+		bottom:0; */
+
+			-webkit-touch-callout: none;
+			/* iOS Safari */
+			-webkit-user-select: none;
+			/* Safari */
+			-khtml-user-select: none;
+			/* Konqueror HTML */
+			-moz-user-select: none;
+			/* Old versions of Firefox */
+			-ms-user-select: none;
+			/* Internet Explorer/Edge */
+			user-select: none;
+			/* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+		}
+
+		text {
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		.nointeraction {
+			pointer-events: none;
+		}
+
+		body {
+			padding-top: 20px;
+		}
+
+		#networkView {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 62px;
+		}
+
+		.plot {
+			font-family: "Helvetica Neue", Helvetica, sans-serif;
+			font-size: 14px;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			height: 100%;
+			width: 100%;
+		}
+
+		canvas {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			height: 100%;
+			width: 100%;
+		}
+
+		.plot line {
+			shape-rendering: auto;
+		}
+
+		.plot .tick {
+			font-size: 13px;
+		}
+
+		.informationPanel text {
+			font-family: "Helvetica Neue", Helvetica, sans-serif;
+			font-size: 14px;
+			stroke: rgba(255, 255, 255, 0.8);
+			font-size: 16px;
+			stroke-width: 3px;
+			paint-order: stroke;
+			pointer-events: none;
+		}
+
+		.fixedTitle text {
+			font-family: "Helvetica Neue", Helvetica, sans-serif;
+			font-size: 14px;
+			stroke: rgba(255, 255, 255, 0.8);
+			font-size: 16px;
+			stroke-width: 3px;
+			paint-order: stroke;
+			pointer-events: none;
+		}
+
+		#collapsablePanel {
+			position: fixed;
+			bottom: 62px;
+			left: 0;
+			right: 0;
+			overflow: hidden;
+			height: 112px;
+			transition-property: height;
+			transition-duration: 0.75s;
+			/*transition-delay: 2s; */
+			pointer-events: none;
+		}
+
+		#collapsablePanel.collapsed {
+			height: 26px;
+		}
+
+		#plotsPanel {
+			height: 90px;
+			overflow-y: hidden;
+			white-space: nowrap;
+			/* display:flex; */
+			background-color: rgba(245, 245, 245, 0.9);
+			/* border-top: 1px solid rgb(230, 227, 221); */
+			align-items: flex-start;
+			overflow-x: scroll;
+			pointer-events: all;
+			/* justify-content: flex-start; or 'flex-start' and change the order of your html elements */
+		}
+
+		#plotsPanel:before {
+			content: "";
+			position: absolute;
+			left: 18px;
+			top: 22px;
+			right: 0;
+			height: 1px;
+			border-top: 1px solid rgb(230, 227, 221);
+			/* border-top:1px solid rgb(230, 227, 221); */
+			/* flex-direction: column; */
+		}
+
+		#plotsPanel .linePlot {
+			/* display:flex; */
+			/* flex: 1 1; */
+			margin: 0px;
+			/* flex-direction: column; */
+			/* background:white; */
+			/* overflow-x: scroll; */
+		}
+
+		#showHideButton {
+			height: 22px;
+			width: 19px;
+			text-align: center;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			text-align: left;
+			font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+			font-size: 11px;
+			background-color: rgba(245, 245, 245, 0.9);
+			border: none;
+			border-top: 1px solid rgb(230, 227, 221);
+			border-right: 1px solid rgb(230, 227, 221);
+			color: rgb(100, 100, 100);
+			padding: 2px;
+			padding-left: 2px;
+			padding-right: 2px;
+			border-radius: 0px 5px 0px 0px;
+			-webkit-box-shadow: none;
+			box-shadow: none;
+			margin: 0px;
+			outline: none;
+			pointer-events: all;
+		}
+
+		#showHideButton:hover {
+			cursor: pointer;
+		}
+
+		#showHideButton:active {
+			-webkit-box-shadow: inset 1px 3px 1px 0 #3d2626;
+			box-shadow: inset 1px 3px 1px 0 #dddddd;
+		}
+
+		#showHideButton:after {
+			content: "\2796";
+		}
+
+		.collapsed #showHideButton:after {
+			content: '\02795';
+			/* Unicode character for "minus" sign (-) */
+		}
+
+		#buttonsPanel {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 52px;
+			padding-left: 10px;
+			padding-right: 10px;
+			padding-bottom: 10px;
+			background-color: rgba(235, 180, 20, 0.5);
+			border-top: 1px solid rgba(235, 180, 20, 1.0);
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			/* or 'flex-start' and change the order of your html elements */
+		}
+
+		#buttonsPanelBackbone {
+			position: fixed;
+			bottom: 62px;
+			width: 190px;
+			left:0;
+			height: 52px;
+			padding-left: 10px;
+			padding-right: 10px;
+			padding-bottom: 10px;
+			background-color: rgba(235, 180, 20, 0.5);
+			border-top: 1px solid rgba(235, 180, 20, 1.0);
+			border-right: 1px solid rgba(235, 180, 20, 1.0);
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			/* or 'flex-start' and change the order of your html elements */
+		}
+
+		#inputPanel {
+			display: flex;
+			flex: 1 1;
+			margin: 0px;
+			flex-direction: column;
+		}
+
+		#inputPanelBackbone {
+			display: flex;
+			flex: 1 1;
+			margin: 0px;
+			flex-direction: column;
+		}
+
+		#timeRule {
+			margin-left: 20px;
+			margin-right: 22px;
+			flex: 1 1 30px;
+			height: 30px;
+			overflow: visible;
+		}
+
+		#timeRuleBackbone {
+			margin-left: 20px;
+			margin-right: 22px;
+			width:150px;
+			flex: 1 1 30px;
+			height: 30px;
+			overflow: visible;
+		}
+
+		input[type="range"] {
+			display: inline-block;
+			flex: 1 1;
+			-webkit-appearance: none;
+			height: 20px;
+			background: rgba(255, 255, 255, 0.2);
+			margin: 0;
+			padding: 0px;
+			border: 1px solid #777777;
+			border-radius: 5px;
+			/* -webkit-box-shadow: 1px 1px 1px 0 #dddddd;
+  box-shadow: 1px 1px 1px 0 #dddddd; */
+			outline: none;
+		}
+
+		input[type="range"]::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			width: 50px;
+			height: 16px;
+			border-radius: 4px;
+			background: rgba(255, 255, 255, 1.0);
+			position: relative;
+			border: 1px solid #777777;
+			z-index: 3;
+			cursor: pointer;
+			outline: none;
+			/* -webkit-box-shadow: 1px 1px 1px 0 #dddddd;
+  box-shadow: 1px 1px 1px 0 #dddddd; */
+		}
+
+		input[type=range]::-moz-range-thumb {
+			-webkit-appearance: none;
+			width: 50px;
+			height: 10px;
+			border-radius: 4px;
+			background: rgba(255, 255, 255, 1.0);
+			position: relative;
+			border: 1px solid #777777;
+			z-index: 3;
+			cursor: pointer;
+			outline: none;
+		}
+
+		input[type=range]::-moz-focus-outer {
+			border: 0;
+		}
+
+		#sliderTooltip {}
+
+		.tooltip {
+			position: absolute;
+			z-index: 1020;
+			padding: 5px;
+			font-size: 11px;
+			visibility: visible;
+			margin-top: -2px;
+			margin-left: -2em;
+			display: none;
+		}
+
+
+		.tooltip .tooltip-arrow {
+			bottom: 0;
+			left: 50%;
+			margin-left: -5px;
+			border-top: 5px solid white;
+			border-right: 5px solid transparent;
+			border-left: 5px solid transparent;
+			position: absolute;
+			width: 0;
+			height: 0;
+		}
+
+		.tooltip-inner {
+			max-width: 200px;
+			padding: 3px 8px;
+			color: black;
+			text-align: center;
+			text-decoration: none;
+			background-color: white;
+			-webkit-border-radius: 4px;
+			-moz-border-radius: 4px;
+			border-radius: 4px;
+		}
+
+		svg text {
+			font-family: "Helvetica Neue Light", Helvetica, sans-serif;
+			pointer-events: none;
+		}
+
+
+		.wrap-collabsible {
+			position:absolute;
+			right:10px;
+			top:50px;
+			width: 200px;
+			bottom:70px;
+			background-color:red;
+		}
+
+		input[type='checkbox'] {
+			display: none;
+		}
+
+		.lbl-toggle {
+			display: block;
+
+			font-weight: bold;
+			font-family: monospace;
+			font-size: 1.2rem;
+			text-transform: uppercase;
+			text-align: center;
+
+			padding: 1rem;
+
+			color: #A77B0E;
+			background: #FAE042;
+
+			cursor: pointer;
+
+			border-radius: 7px;
+			transition: all 0.25s ease-out;
+		}
+
+		.lbl-toggle:hover {
+			color: #7C5A0B;
+		}
+
+		.lbl-toggle::before {
+			content: ' ';
+			display: inline-block;
+
+			border-top: 5px solid transparent;
+			border-bottom: 5px solid transparent;
+			border-left: 5px solid currentColor;
+			vertical-align: middle;
+			margin-right: .7rem;
+			transform: translateY(-2px);
+
+			transition: transform .2s ease-out;
+		}
+
+		.toggle:checked+.lbl-toggle::before {
+			transform: rotate(90deg) translateX(-3px);
+		}
+
+		.collapsible-content {
+			max-height: 0px;
+			overflow: hidden;
+			transition: max-height .25s ease-in-out;
+		}
+
+		.toggle:checked+.lbl-toggle+.collapsible-content {
+			max-height: 100vh;
+		}
+
+		.toggle:checked+.lbl-toggle {
+			border-bottom-right-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+
+		.collapsible-content .content-inner {
+			background: rgba(250, 224, 66, .2);
+			border-bottom: 1px solid rgba(250, 224, 66, .45);
+			border-bottom-left-radius: 7px;
+			border-bottom-right-radius: 7px;
+			padding: .5rem 1rem;
+		}
+
+		#labelsPanel {
+			position:absolute;
+			right:10px;
+			top:50px;
+			/* width: 200px; */
+			bottom:70px;
+			/* background-color:red; */
+			overflow-y:scroll;
+		}
+		.labelItem{
+			font-size: 12px;
+			padding: 1px;
+			padding-right:14px;
+			text-align:right;
+			/* border:#CCCCCC 1px solid; */
+			/* border-top-width: 0.5px;
+			border-bottom-width: 0.5px; */
+			/* background:white; */
+			cursor: pointer;
+
+		}
+		.labelItem:hover{
+			/* bold */
+			font-weight: bold;
+		}
+		.labelItem.selected{
+			/* bold */
+			font-weight: bold;
+		}
+	</style>
+
+
+	<script id="edges-vertex" type="text/glsl-vertex" src="Shaders/edges.vsh"></script>
+	<script id="edges-fragment" type="text/glsl-fragment" src="Shaders/edges.fsh"></script>
+
+
+</head>
+
+<body>
+	<script src="Library/d3.js"></script>
+	<script src="Library/d3-save-svg.js"></script>
+	<script src="Library/xnet.js"></script>
+	<script src="Library/gl-matrix.js"></script>
+	<script src="Library/gl-shader.js"></script>
+	<script src="Main/miscUtilities.js"></script>
+	<script src="Main/dynamicNetworks.js" defer></script>
+
+	<div id="networkView"></div>
+
+	<div id="buttonsPanel">
+		<div id="inputPanel">
+			<svg id="timeRule"></svg>
+			<input type="range" id="timeSlider" min="0" value="0" max="100" step="1" />
+		</div>
+		<!-- <button id="saveSVGButton">Save SVG</button> -->
+	</div>
+	<div id="buttonsPanelBackbone">
+		<div id="inputPanelBackbone">
+			<svg id="timeRuleBackbone"></svg>
+			<input type="range" id="timeSliderBackbone" min="0" value="0" max="100" step="1" />
+		</div>
+	</div>
+	<div id="labelsPanel">
+	<!-- <div class="wrap-collabsible"> <input id="collapsible2" class="toggle" type="checkbox" checked=""> <label
+			for="collapsible2" class="lbl-toggle">Even More Info</label>
+		<div class="collapsible-content"> -->
+			<!-- <div class="content-inner">
+				<p> Bacon ipsum dolor amet pork belly capicola ground round brisket. Shank pork belly cupim fatback.
+					Flank porchetta chicken spare ribs. Ham prosciutto pork belly turkey beef picanha strip steak swine
+					alcatra.</p>
+			</div> -->
+				
+		<!-- </div>
+	</div> -->
+	</div>
+</body>
+
+</html>

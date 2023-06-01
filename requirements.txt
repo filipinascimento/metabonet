@@ -1,0 +1,8 @@
+numpy
+xnetwork
+tqdm
+leidenalg
+igraph-python
+pandas
+mpmath
+scipy

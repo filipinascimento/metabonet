@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"target": "ES6"
+	},
+	"include": [
+		"Library/xnet.js",
+		"Library/webgl-utils.js",
+		"Library/d3-save-svg.js",
+		"Library/gl-shader.js",
+		"Library/gl-matrix.js",
+		"Library/d3.js"
+	],
+	"typeAcquisition": {
+		"include": [
+			"d3",
+		]
+	}
+}

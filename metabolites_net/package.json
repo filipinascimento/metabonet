@@ -1,0 +1,29 @@
+{
+  "main": "index.html",
+  "name": "dynamic",
+  "description": "demo app of node-webkit",
+  "version": "0.1.0",
+  "keywords": [
+    "demo",
+    "node-webkit"
+  ],
+  "window": {
+    "title": "node-webkit demo",
+    "icon": "link.png",
+    "toolbar": true,
+    "frame": true,
+    "width": 1400,
+    "height": 700,
+    "position": "mouse",
+    "min_width": 900,
+    "min_height": 700,
+    "max_width": 1920,
+    "max_height": 1080
+  },
+  "dependencies": {
+    "d3": "5.7"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0"
+  }
+}
