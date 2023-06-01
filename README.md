@@ -34,7 +34,7 @@ The package creates a visualization from a `csv` file. Here are the arguments fo
 ```
 Example usage:
 ```
-python3 metabonet.py -w 0.6,1,0.1 -b 0.01,0.05,0.10 -s 6 -i exampleData/Fed_vs_16hr_fast_signif.csv -o Fed_vs_16hr_fast_signif_network -S -p 8000
+python metabonet.py -w 0.6,1,0.1 -b 0.01,0.05,0.10 -s 6 -i exampleData/Fed_vs_16hr_fast_signif.csv -o Fed_vs_16hr_fast_signif_network -S -p 8000
 ```
 This will read file `Fed_vs_16hr_fast_signif.csv` and use columns 6 to the end as input as metabolite data. It will create a network for each threshold in the range 0.6 to 1 with a step of 0.1. It will also create a backbone network for each p-value in the set 0.01, 0.05 and 0.10. The results will be saved in the folder `Fed_vs_16hr_fast_signif_network`. Finally, it will serve the results to the browser at port 8000.
 
