@@ -30,6 +30,7 @@ outputPath = "Data"
 
 #servePage will serve the rootPath to the browser
 def servePage(port,rootPath):
+    print("Serving results", rootPath, "to browser at port",port)
     import http.server
     import socketserver
     import webbrowser
@@ -91,6 +92,8 @@ outputPath.mkdir(parents=True,exist_ok=True)
 networksPath.mkdir(parents=True,exist_ok=True)
 
 # Uncompress metabolites_net.tar.gz from the package directory to outputPath
+# sh command to compress directory metabolites_net to metabolites_net.tar.gz
+# !tar -C metabolites_net --disable-copyfile -zcvf metabolites_net.tar.gz ./
 import tarfile
 import shutil
 #get tarPath
@@ -216,7 +219,6 @@ for thresholdWeight in tqdm(thresholdsWeight,leave=False):
         disparity_filter(g,weights="weight_abs")
         indices.update(np.where(g.es["alpha_ij"]>thresholdBackbone)[0])
         
-
         g.delete_edges(list(indices))
         if(g.ecount()==0):
             # print("Skipping empty graph",networkName,thresholdWeight,thresholdBackbone)

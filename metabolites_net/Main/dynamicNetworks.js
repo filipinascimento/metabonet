@@ -1008,6 +1008,7 @@ async function startVisualization() {
 
 	async function getNetworkFromThresholds(thresholdIndex, thresholdBackboneIndex) {
 		let filename = indexPair2networkName[thresholdIndex + "_" + thresholdBackboneIndex];
+		console.log({filename});
 		let network = await getNetwork(filename);
 		return network;
 	}
@@ -1021,6 +1022,7 @@ async function startVisualization() {
 	displayProperties = ["Label"];
 	IDProperty = "Label";
 	colorProperty = "Leiden Layered";
+	console.log({currentThresholdWeightIndex, currentThresholdBackboneIndex});
 	displayNetwork = await getNetworkFromThresholds(currentThresholdWeightIndex, currentThresholdBackboneIndex);
 
 
